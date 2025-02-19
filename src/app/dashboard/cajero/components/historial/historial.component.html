@@ -1,0 +1,118 @@
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Historial de Parqueos</h2>
+  
+    <!-- Filtros por período -->
+    <div class="flex space-x-4 mb-4">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              (click)="cambiarPeriodo('DIA')">
+        Hoy
+      </button>
+      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              (click)="cambiarPeriodo('SEMANA')">
+        Última Semana
+      </button>
+      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              (click)="cambiarPeriodo('MES')">
+        Último Mes
+      </button>
+    </div>
+  
+    <!-- Listado de Contratos -->
+    <div class="bg-white p-4 rounded shadow-md mb-6">
+      <h3 class="text-lg font-bold text-gray-800 mb-3">Contratos</h3>
+      <table class="min-w-full border border-gray-300 shadow-md rounded-lg">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="py-2 px-4 border-b">Usuario</th>
+            <th class="py-2 px-4 border-b">Espacio</th>
+            <th class="py-2 px-4 border-b">Fecha Inicio</th>
+            <th class="py-2 px-4 border-b">Fecha Fin</th>
+            <th class="py-2 px-4 border-b">Monto Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contrato of contratos" class="hover:bg-gray-100">
+            <td class="py-2 px-4 border-b">{{ contrato.usuario.persona.nombre }}</td>
+            <td class="py-2 px-4 border-b">Espacio #{{ contrato.espacio.id }}</td>
+            <td class="py-2 px-4 border-b">{{ contrato.fechaInicio }}</td>
+            <td class="py-2 px-4 border-b">{{ contrato.fechaFin }}</td>
+            <td class="py-2 px-4 border-b font-semibold text-green-600">
+              ${{ contrato.montoTotal.toFixed(2) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Listado de Tickets -->
+    <div class="bg-white p-4 rounded shadow-md">
+      <h3 class="text-lg font-bold text-gray-800 mb-3">Tickets</h3>
+      <table class="min-w-full border border-gray-300 shadow-md rounded-lg">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="py-2 px-4 border-b">Espacio</th>
+            <th class="py-2 px-4 border-b">Fecha Emisión</th>
+            <th class="py-2 px-4 border-b">Hora Entrada</th>
+            <th class="py-2 px-4 border-b">Hora Salida</th>
+            <th class="py-2 px-4 border-b">Monto Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ticket of tickets" class="hover:bg-gray-100">
+            <td class="py-2 px-4 border-b">Espacio #{{ ticket.espacio.id }}</td>
+            <td class="py-2 px-4 border-b">{{ ticket.fechaEmision }}</td>
+            <td class="py-2 px-4 border-b">{{ ticket.horaEntrada }}</td>
+            <td class="py-2 px-4 border-b">{{ ticket.horaSalida || 'En uso' }}</td>
+            <td class="py-2 px-4 border-b font-semibold text-green-600">
+              {{ ticket.montoTotal ? '$' + ticket.montoTotal.toFixed(2) : 'Pendiente' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- 🔹 Reporte de Ganancias -->
+  <div class="bg-white p-4 rounded shadow-md mt-6">
+    <h3 class="text-lg font-bold text-gray-800 mb-3">Reporte de Ganancias</h3>
+
+    <div class="flex justify-between">
+      <div class="p-4 bg-blue-100 rounded shadow">
+        <p class="text-gray-700 font-semibold">Total por Usuarios</p>
+        <p class="text-xl font-bold text-blue-700">$ {{ totalGananciasUsuarios.toFixed(2) }}</p>
+      </div>
+
+      <div class="p-4 bg-green-100 rounded shadow">
+        <p class="text-gray-700 font-semibold">Total por Clientes Ocasionales</p>
+        <p class="text-xl font-bold text-green-700">$ {{ totalGananciasClientesOcasionales.toFixed(2) }}</p>
+      </div>
+    </div>
+  </div>
+
+<div class="bg-white p-4 rounded shadow-md mt-6">
+  <h3 class="text-lg font-bold text-gray-800 mb-3">Reporte: Ingresos por Espacio</h3>
+
+  <table class="min-w-full border border-gray-300 shadow-md rounded-lg">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="py-2 px-4 border-b">ID Espacio</th>
+        <th class="py-2 px-4 border-b">Total Generado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let espacioId of Object.keys(ingresosPorEspacio)" class="hover:bg-gray-100">
+        <td class="py-2 px-4 border-b text-center">Espacio #{{ espacioId }}</td>
+        <td class="py-2 px-4 border-b font-semibold text-green-600 text-center">
+          ${{ ingresosPorEspacio[parseEspacioId(espacioId)].toFixed(2) }}
+        </td>
+      </tr>
+      
+        
+      
+    </tbody>
+  </table>
+</div>
+
+
+  </div>
+  

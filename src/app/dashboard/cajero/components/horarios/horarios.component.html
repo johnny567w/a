@@ -1,0 +1,152 @@
+<div class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Gestión de Horarios</h2>
+  
+    <!-- Indicador de si el local está abierto -->
+    <div class="p-4 rounded-lg text-center"
+     [class.bg-green-500]="localAbierto && !excepcionActiva"
+     [class.bg-red-500]="!localAbierto">
+    <p class="text-white font-semibold">
+      <span *ngIf="localAbierto && !proximaExcepcion">El local está ABIERTO</span>
+      <span *ngIf="localAbierto && proximaExcepcion">El local está ABIERTO - Excepción próxima: {{ proximaExcepcion }}</span>
+      <span *ngIf="!localAbierto && excepcionActiva">El local está CERRADO por excepción</span>
+      <span *ngIf="!localAbierto && !excepcionActiva">El local está CERRADO</span>
+    </p>
+
+    <!-- Horario normal del día -->
+    <p *ngIf="horarioHoy" class="text-white text-sm mt-2">
+      🕒 Horario habitual: {{ horarioHoy.horaApertura }} - {{ horarioHoy.horaCierre }} ({{ horarioHoy.tipoHorario.descripcion }})
+    </p>
+
+    <!-- Excepción activa en este momento -->
+    <p *ngIf="exceptionHoy && excepcionActiva" class="text-white text-sm mt-2">
+      🚨 Cierre inesperado: 
+      <span *ngIf="exceptionHoy.cierreTodoDia">Todo el día</span>
+      <span *ngIf="!exceptionHoy.cierreTodoDia">
+        {{ exceptionHoy.horaApertura }} - {{ exceptionHoy.horaCierre }}
+      </span>
+    </p>
+
+    <!-- Excepción futura -->
+    <p *ngIf="proximaExcepcion" class="text-white text-sm mt-2">
+      ⏳ Excepción próxima: {{ proximaExcepcion }}
+    </p>
+    </div>
+
+
+
+
+  
+    <!-- Listado de horarios -->
+    <table class="w-full mt-6 border-collapse border border-gray-300">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border border-gray-300 p-2">Tipo</th>
+          <th class="border border-gray-300 p-2">Hora Apertura</th>
+          <th class="border border-gray-300 p-2">Hora Cierre</th>
+          <th class="border border-gray-300 p-2">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let horario of horarios">
+          <td class="border border-gray-300 p-2">{{ horario.tipoHorario.descripcion }}</td>
+          <td class="border border-gray-300 p-2">{{ horario.horaApertura }}</td>
+          <td class="border border-gray-300 p-2">{{ horario.horaCierre }}</td>
+          <td class="border border-gray-300 p-2">
+            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                    (click)="editarHorario(horario)">
+              Editar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Formulario de edición de horario -->
+    <div *ngIf="horarioEditando" class="mt-6 p-4 bg-white shadow rounded-lg">
+      <h3 class="text-lg font-bold mb-2">Editar Horario</h3>
+      <form [formGroup]="horarioForm" (ngSubmit)="guardarEdicion()">
+        <div class="mb-2">
+          <label class="block text-sm font-medium text-gray-700">Hora de Apertura</label>
+          <input type="time" formControlName="horaApertura" class="border p-2 w-full rounded">
+        </div>
+  
+        <div class="mb-2">
+          <label class="block text-sm font-medium text-gray-700">Hora de Cierre</label>
+          <input type="time" formControlName="horaCierre" class="border p-2 w-full rounded">
+        </div>
+  
+        <div class="mt-4 flex gap-2">
+          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Guardar
+          </button>
+          <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  (click)="cancelarEdicion()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-6 bg-white p-6 shadow-md rounded-lg">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Agregar Excepción de Horario</h2>
+    
+      <form [formGroup]="exceptionForm" (ngSubmit)="crearExcepcion()">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Fecha</label>
+          <input type="date" formControlName="fecha" class="border p-2 w-full rounded">
+        </div>
+    
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Hora de Inicio</label>
+          <input type="time" formControlName="horaApertura" class="border p-2 w-full rounded">
+        </div>
+    
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Hora de Fin</label>
+          <input type="time" formControlName="horaCierre" class="border p-2 w-full rounded">
+        </div>
+    
+        <div class="mb-4 flex items-center">
+          <input type="checkbox" formControlName="cierreTodoDia" class="mr-2">
+          <label class="text-sm font-medium text-gray-700">Cerrar todo el día</label>
+        </div>
+    
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600">
+          Agregar Excepción
+        </button>
+      </form>
+    </div>
+
+    <div class="mt-6">
+      <h3 class="text-lg font-bold text-gray-800 mb-2">Excepciones de Horario</h3>
+      
+      <table class="min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="py-2 px-4 border-b">Fecha</th>
+            <th class="py-2 px-4 border-b">Apertura</th>
+            <th class="py-2 px-4 border-b">Cierre</th>
+            <th class="py-2 px-4 border-b">Día Cerrado</th>
+            <th class="py-2 px-4 border-b">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let excepcion of exceptionHorarios" class="hover:bg-gray-100">
+            <td class="py-2 px-4 border-b">{{ excepcion.fecha }}</td>
+            <td class="py-2 px-4 border-b">{{ excepcion.horaApertura || 'N/A' }}</td>
+            <td class="py-2 px-4 border-b">{{ excepcion.horaCierre || 'N/A' }}</td>
+            <td class="py-2 px-4 border-b">{{ excepcion.cierreTodoDia ? 'Sí' : 'No' }}</td>
+            <td class="py-2 px-4 border-b">
+              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                      (click)="eliminarExcepcion(excepcion.id)">
+                🗑️ Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    
+</div>
+  

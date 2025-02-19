@@ -1,0 +1,109 @@
+<section class="h-screen bg-gray-100">
+  <div class="flex flex-col h-full">
+    <!-- Barra de navegación -->
+    <nav class="bg-gray-900 text-white p-4 shadow-lg">
+      <div class="container mx-auto flex justify-between items-center">
+        <!-- Título -->
+        <h1 class="text-2xl font-bold">
+          Bienvenido, {{ nombreCajeroActual }}
+        </h1>
+
+        <!-- Menú hamburguesa -->
+        <div class="md:hidden">
+          <button class="block text-white focus:outline-none" (click)="toggleMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Navegación para pantallas grandes -->
+        <ul class="hidden md:flex space-x-6">
+          <li>
+            <a routerLink="inicio-cajero" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a routerLink="usuarios" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Usuarios
+            </a>
+          </li>
+          <li>
+            <a routerLink="contratos" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Contratos
+            </a>
+          </li>
+          <li>
+            <a routerLink="espacios" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Espacios
+            </a>
+          </li>
+          <li>
+            <a routerLink="horarios" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Horarios
+            </a>
+          </li>
+          <li>
+            <a routerLink="tarifas" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Tarifas
+            </a>
+          </li>
+          <li>
+            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200" (click)="logout()">
+              Cerrar Sesión
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Menú hamburguesa desplegable -->
+      <div class="md:hidden" [class.hidden]="!menuOpen" class="block mt-4">
+        <ul class="flex flex-col space-y-4">
+          <li>
+            <a routerLink="inicio-cajero" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a routerLink="usuarios" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Usuarios
+            </a>
+          </li>
+          <li>
+            <a routerLink="contratos" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Contratos
+            </a>
+          </li>
+          <li>
+            <a routerLink="espacios" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Espacios
+            </a>
+          </li>
+          <li>
+            <a routerLink="horarios" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Horarios
+            </a>
+          </li>
+          <li>
+            <a routerLink="tarifas" routerLinkActive="text-gold-500 font-semibold" class="hover:text-gold-500 transition duration-200">
+              Gestión de Tarifas
+            </a>
+          </li>
+          <li>
+            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200" (click)="logout()">
+              Cerrar Sesión
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Contenido del dashboard -->
+    <div class="flex-1 p-8">
+      <router-outlet></router-outlet>
+    </div>
+
+    <app-footer></app-footer>
+  </div>
+</section>

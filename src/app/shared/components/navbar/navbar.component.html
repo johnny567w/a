@@ -1,0 +1,24 @@
+<header class="bg-blue-900 text-white py-6 fixed w-full top-0 z-50 shadow-md">
+  <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+    <!-- Logo -->
+    <a href="#" class="flex items-center">
+      <img src="assets/img/logoups.png" alt="Logo Parqueadero" class="h-12">
+    </a>
+
+    <!-- Navegación -->
+    <nav class="flex flex-col sm:flex-row sm:space-x-4 w-full sm:w-auto space-y-2 sm:space-y-0 items-center">
+      <button
+        (click)="navigateToLogin()"
+        class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium text-center"
+      >
+        Iniciar Sesión
+      </button>
+      <button
+        (click)="navigateToSignup()"
+        class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium text-center"
+      >
+        Regístrate
+      </button>
+    </nav>
+  </div>
+</header>

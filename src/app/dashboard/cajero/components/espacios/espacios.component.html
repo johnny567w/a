@@ -1,0 +1,97 @@
+<div class="container mx-auto p-6">
+
+  <div class="bg-white p-4 rounded shadow-md mb-4">
+    <h3 class="text-lg font-bold text-gray-800">Ocupar Espacio Usuarios</h3>
+  
+    <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2">
+      
+      <input [(ngModel)]="vehiculoPlaca" 
+             placeholder="Ingrese la placa del vehículo" 
+             class="border p-2 rounded w-full">
+
+      <input [(ngModel)]="espacioId" 
+              type="number"
+              placeholder="Ingrese el ID del espacio" 
+              class="border p-2 rounded w-full">
+      
+      <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              (click)="ocuparEspacio()">
+        Ocupar Espacio
+      </button>
+    </div>
+  </div>
+
+  <!-- Formulario para Ocupar Espacio con Cliente Ocasional -->
+<div class="bg-white p-4 rounded shadow-md mb-4">
+  <h3 class="text-lg font-bold text-gray-800">Ocupar Espacio Clientes Ocasionales</h3>
+
+  <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-2">
+    <input [(ngModel)]="clienteNombre"
+           placeholder="Ingrese el nombre del cliente"
+           class="border p-2 rounded w-full">
+
+    <input [(ngModel)]="clientePlaca"
+           placeholder="Ingrese la placa del vehículo"
+           class="border p-2 rounded w-full">
+
+    <input [(ngModel)]="espacioId"
+           type="number"
+           placeholder="Ingrese el ID del espacio"
+           class="border p-2 rounded w-full">
+
+    <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            (click)="ocuparEspacioConClienteOcasional()">
+      Ocupar Espacio
+    </button>
+  </div>
+</div>
+
+
+  <!-- Mensaje de notificación -->
+  <div *ngIf="mensaje" class="p-4 rounded text-center mb-4 shadow-md" [ngClass]="mensajeClase">
+    {{ mensaje }}
+  </div>
+
+  
+  
+
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Lista de Espacios</h2>
+  
+    <!-- Grid de Espacios -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div 
+        *ngFor="let espacio of espaciosPaginados" 
+        class="p-4 rounded text-center border shadow-lg cursor-pointer hover:opacity-80 transition-all duration-300"
+        [ngClass]="obtenerClaseEstado(espacio)">
+        
+        <p class="font-bold">Sitio {{ espacio.id }}</p>
+        <p *ngIf="espacio.ocupado">🔴 Ocupado</p>
+        <p *ngIf="espacio.reservado && !espacio.ocupado">🟠 Reservado</p>
+        <p *ngIf="!espacio.ocupado && !espacio.reservado">🟢 Disponible</p>
+
+        <!-- Botón para liberar espacio -->
+        <button *ngIf="espacio.ocupado" 
+                class="bg-red-700 text-white px-4 py-2 rounded mt-2 hover:bg-red-600 transition"
+                (click)="liberarEspacio(espacio)">
+          Liberar
+        </button>
+      </div>
+
+    </div>
+  
+    <!-- Paginación -->
+    <div class="mt-6 flex justify-between">
+      <button 
+        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+        (click)="cambiarPagina(-1)" 
+        [disabled]="paginaActual === 0">⬅️ Anterior
+      </button>
+  
+      <button 
+        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+        (click)="cambiarPagina(1)" 
+        [disabled]="(paginaActual + 1) * espaciosPorPagina >= espacios.length">Siguiente ➡️
+      </button>
+    </div>
+  </div>
+  

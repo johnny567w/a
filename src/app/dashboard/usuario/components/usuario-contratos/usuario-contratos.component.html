@@ -1,0 +1,112 @@
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Lista de Espacios</h2>
+  
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div 
+        *ngFor="let espacio of espaciosPaginados" 
+        class="p-4 rounded text-center border shadow-lg cursor-pointer hover:opacity-80 transition-all duration-300"
+        [ngClass]="obtenerClaseEstado(espacio)"
+        (click)="seleccionarEspacio(espacio)">
+        <p class="font-bold">Sitio {{ espacio.id }}</p>
+        <p *ngIf="espacio.ocupado">🔴 Ocupado</p>
+        <p *ngIf="espacio.reservado && !espacio.ocupado">🟠 Reservado</p>
+        <p *ngIf="!espacio.ocupado && !espacio.reservado">🟢 Disponible</p>
+      </div>
+    </div>
+  
+    <div class="mt-6 flex justify-between">
+      <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+        (click)="cambiarPagina(-1)" [disabled]="paginaActual === 0">⬅️ Anterior</button>
+  
+      <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+        (click)="cambiarPagina(1)" [disabled]="(paginaActual + 1) * espaciosPorPagina >= espacios.length">Siguiente ➡️</button>
+    </div>
+  
+    <div *ngIf="espacioSeleccionado" class="mt-8 p-6 bg-white shadow-md rounded-lg">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">
+          Crear Contrato - <span class="text-indigo-600">Espacio #{{ espacioSeleccionado.id }}</span>
+        </h3>
+      
+        <form [formGroup]="contratoForm" (ngSubmit)="crearContrato()">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
+            <input type="date" formControlName="fechaInicio" class="border p-2 w-full rounded">
+            <p *ngIf="contratoForm.get('fechaInicio')?.invalid && contratoForm.get('fechaInicio')?.touched" 
+               class="text-red-600 text-sm">
+              ⚠ La fecha debe ser a partir de hoy y no mayor a 2030.
+            </p>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Fecha de Fin</label>
+            <input type="date" formControlName="fechaFin" class="border p-2 w-full rounded">
+            <p *ngIf="contratoForm.get('fechaFin')?.invalid && contratoForm.get('fechaFin')?.touched" 
+               class="text-red-600 text-sm">
+              ⚠ La fecha debe ser a partir de hoy y no mayor a 2030.
+            </p>
+          </div>
+          
+      
+          <p class="text-lg font-semibold">
+            Total: <span class="text-green-600 font-bold">${{ calcularMontoTotal() }}</span>
+          </p>
+      
+          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded mt-4 hover:bg-green-600">
+            Confirmar Contrato
+          </button>
+        </form>
+      </div>
+
+      
+      <div *ngIf="contratos.length > 0" class="mt-6">
+        <h2 class="text-xl font-bold text-indigo-900 dark:text-black mb-4 text-center">Tus Contratos</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div *ngFor="let contrato of contratos" 
+                 class="grid grid-cols-1 gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-700 text-white p-4 shadow-2xl transition transform hover:scale-105">
+    
+                <!-- Duración, Inicio y Fin -->
+                <div class="flex justify-between items-center bg-indigo-800 p-2 rounded-lg">
+                    <div class="flex flex-col text-center">
+                        <span class="text-lg font-bold">{{ calcularDuracionMeses(contrato.fechaInicio, contrato.fechaFin) }} meses</span>
+                        <span class="text-xs text-indigo-200">Duración</span>
+                    </div>
+                    <div class="flex flex-col text-center">
+                        <span class="text-base font-semibold">{{ contrato.fechaInicio | date: 'dd/MM/yyyy' }}</span>
+                        <span class="text-xs text-indigo-200">Inicio</span>
+                    </div>
+                    <div class="flex flex-col text-center">
+                        <span class="text-base font-semibold">{{ contrato.fechaFin | date: 'dd/MM/yyyy' }}</span>
+                        <span class="text-xs text-indigo-200">Fin</span>
+                    </div>
+                </div>
+    
+                <!-- Información del Espacio -->
+                <div class="bg-indigo-900 p-3 rounded-lg shadow-md">
+                    <h3 class="text-lg font-bold text-center">📍 Sitio {{ contrato.espacio.id }}</h3>
+    
+                    <div *ngIf="contratoSeleccionado === contrato.espacio.id" class="text-sm text-indigo-100 mt-3">
+                        <p>💰 <strong>Tarifa:</strong> ${{ tarifaActual }}</p>
+                        <p>💵 <strong>Costo Total:</strong> ${{ contrato.montoTotal }}</p>
+                    </div>
+    
+                    <!-- Botones -->
+                    <div class="flex justify-center mt-3">
+                        <button
+                            *ngIf="contratoSeleccionado !== contrato.espacio.id"
+                            class="bg-white text-indigo-700 px-4 py-2 rounded-md hover:bg-gray-100 transition shadow-md"
+                            (click)="mostrarInformacion(contrato.espacio.id)">
+                            🔍 Más Información
+                        </button>
+                        <button
+                            *ngIf="contratoSeleccionado === contrato.espacio.id"
+                            class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition shadow-md"
+                            (click)="mostrarInformacion(null)">
+                            ❌ Ocultar Información
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
