@@ -1,4 +1,4 @@
-ya y?
+no me mandes tan desorganizado donde va cada cosa lol
 FROM httpd:2.4
 
 COPY apache.conf /usr/local/apache2/conf/httpd.conf
