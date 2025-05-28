@@ -19,7 +19,7 @@ ServerName localhost
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 
-Eso donde va, dile cual es el comando para generar un nuevo proyecto en angular, que se llama Front
+
 ServerName localhost
 
 <VirtualHost *:80>
@@ -40,14 +40,7 @@ FROM httpd:2.4
 
 COPY apache.conf /usr/local/apache2/conf/httpd.conf
 COPY Angular/ /usr/local/apache2/htdocs/
-ng new Front --defaults --skip-tests --routing=false
-Esto crea un proyecto Angular llamado Front.
 
---defaults usa las opciones predeterminadas.
-
---skip-tests no crea archivos de test.
-
---routing=false no incluye configuración de rutas.
 Luego accede a la carpeta:
 cd Front
 Ya dentro puedes trabajar y luego compilar para producción con:
