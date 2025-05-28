@@ -18,3 +18,5 @@ ServerName localhost
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
+
+Eso donde va, dile cual es el comando para generar un nuevo proyecto en angular, que se llama Front
